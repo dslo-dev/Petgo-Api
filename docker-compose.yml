@@ -1,0 +1,32 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: petgo_postgres
+    restart: always
+    environment:
+      POSTGRES_DB: petgo
+      POSTGRES_USER: apipetgouser
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5488:5432"
+    volumes:
+      - petgo_postgres_data:/var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: petgo_pgadmin
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@petgo.com
+      PGADMIN_DEFAULT_PASSWORD: admin_password
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    ports:
+      - "5050:80"
+    volumes:
+      - petgo_pgadmin_data:/var/lib/pgadmin
+    depends_on:
+      - postgres
+
+volumes:
+  petgo_postgres_data:
+  petgo_pgadmin_data:
