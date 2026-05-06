@@ -8,7 +8,7 @@ services:
       POSTGRES_USER: apipetgouser
       POSTGRES_PASSWORD: password
     ports:
-      - "5488:5432"
+      - '5488:5432'
     volumes:
       - petgo_postgres_data:/var/lib/postgresql/data
 
@@ -21,7 +21,7 @@ services:
       PGADMIN_DEFAULT_PASSWORD: admin_password
       PGADMIN_CONFIG_SERVER_MODE: 'False'
     ports:
-      - "5050:80"
+      - '5050:80'
     volumes:
       - petgo_pgadmin_data:/var/lib/pgadmin
     depends_on:
