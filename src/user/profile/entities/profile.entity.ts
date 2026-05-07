@@ -12,7 +12,7 @@ export class Profile {
 	name!: string;
 
 	@Column({ type: 'varchar', length: '100', nullable: false })
-	lastName!: string;
+	lastname!: string;
 
 	@CreateDateColumn({ name: 'created_at', default: () => 'CURRENT_TIMESTAMP' })
 	createdAt!: Date;

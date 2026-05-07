@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn, OneToOne } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, OneToOne, JoinColumn } from 'typeorm';
 import { Profile } from '../profile/entities/profile.entity';
 
 @Entity()
@@ -7,7 +7,7 @@ export class User {
 	id!: number;
 
 	@Column({ name: 'user_name' })
-	userName!: string;
+	username!: string;
 
 	@Column({ type: 'varchar', length: '100', nullable: false, unique: true })
 	email!: string;
@@ -15,6 +15,7 @@ export class User {
 	@Column({ type: 'varchar', length: '80', nullable: false })
 	password!: string;
 
-	@OneToOne(() => Profile)
+	@OneToOne(() => Profile, { cascade: true })
+	@JoinColumn()
 	profile!: Profile;
 }
