@@ -14,6 +14,9 @@ export class Profile {
 	@Column({ type: 'varchar', length: '100', nullable: false })
 	lastname!: string;
 
+	@Column({ type: 'varchar', default: 'user', nullable: false })
+	role!: string;
+
 	@CreateDateColumn({ name: 'created_at', default: () => 'CURRENT_TIMESTAMP' })
 	createdAt!: Date;
 
