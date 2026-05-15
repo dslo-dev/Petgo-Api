@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, DeleteDateColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, DeleteDateColumn, OneToOne } from 'typeorm';
+import { Role } from './Role.entity';
 
 @Entity()
 export class Profile {
@@ -14,9 +15,6 @@ export class Profile {
 	@Column({ type: 'varchar', length: '100', nullable: false })
 	lastname!: string;
 
-	@Column({ type: 'varchar', default: 'user', nullable: false })
-	role!: string;
-
 	@CreateDateColumn({ name: 'created_at', default: () => 'CURRENT_TIMESTAMP' })
 	createdAt!: Date;
 
@@ -25,4 +23,7 @@ export class Profile {
 
 	@Column({ name: 'active', default: true })
 	isActive!: boolean;
+
+	@OneToOne(() => Role, { cascade: true })
+	role!: Role;
 }

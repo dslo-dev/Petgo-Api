@@ -1,6 +1,6 @@
 import { IsEmail, IsNotEmpty, IsObject, IsString, MinLength, ValidateNested } from 'class-validator';
-import { CreateProfileDto } from '../../user/profile/dto/create-profile.dto';
 import { Type } from 'class-transformer';
+import { CreateProfileDto } from 'src/user/dto/profile/createProfileDTO';
 
 export class RegisterDTO {
 	@IsString()
