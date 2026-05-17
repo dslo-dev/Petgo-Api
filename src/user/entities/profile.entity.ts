@@ -1,5 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, DeleteDateColumn, ManyToMany } from 'typeorm';
-import { JoinColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, DeleteDateColumn, ManyToMany, JoinTable } from 'typeorm';
 import { Role } from './role.entity';
 
 @Entity()
@@ -25,7 +24,7 @@ export class Profile {
 	@Column({ name: 'active', default: true })
 	isActive!: boolean;
 
-	@ManyToMany(() => Role, { nullable: false })
-	@JoinColumn()
-	role!: Role;
+	@ManyToMany(() => Role, (role) => role.profiles)
+	@JoinTable({ name: 'profile_role' })
+	roles!: Role[];
 }
