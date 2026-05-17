@@ -1,0 +1,23 @@
+import { IsEmail, IsNotEmpty, IsObject, IsString, MinLength, ValidateNested } from 'class-validator';
+import { CreateProfileDto } from './profile/createProfileDTO';
+import { Type } from 'class-transformer';
+
+export class updateUserDTO {
+	@IsString()
+	@IsNotEmpty()
+	username?: string;
+
+	@IsNotEmpty()
+	@IsEmail()
+	email?: string;
+
+	@IsNotEmpty()
+	@IsString()
+	@MinLength(8)
+	password?: string;
+
+	@ValidateNested()
+	@Type(() => CreateProfileDto)
+	@IsObject()
+	profile?: CreateProfileDto;
+}

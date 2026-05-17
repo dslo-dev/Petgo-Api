@@ -1,26 +1,49 @@
-import { Injectable } from '@nestjs/common';
-import { CreateAuthDto } from './dto/create-auth.dto';
-import { UpdateAuthDto } from './dto/update-auth.dto';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { LoginDTO } from './dto/LoginDTO';
+import { UserService } from 'src/user/user.service';
+import { createUserDTO } from 'src/user/dto/createUserDTO';
+import { JwtService } from '@nestjs/jwt';
+import bcrypt from 'node_modules/bcryptjs';
+import { UnauthorizedException } from '@nestjs/common';
 
 @Injectable()
 export class AuthService {
-  create(createAuthDto: CreateAuthDto) {
-    return 'This action adds a new auth';
-  }
-
-  findAll() {
-    return `This action returns all auth`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} auth`;
-  }
-
-  update(id: number, updateAuthDto: UpdateAuthDto) {
-    return `This action updates a #${id} auth`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} auth`;
-  }
+	constructor(
+		private readonly userService: UserService,
+		private readonly jwtService: JwtService,
+	) {}
+	// login
+	async login(body: LoginDTO) {
+		const user = await this.userService.find(body.email);
+		if (!user) {
+			throw new UnauthorizedException('Usuario Incorrecto o contraseña ');
+		}
+		const isValidPass = await bcrypt.compare(body.password, user.password);
+		if (isValidPass) {
+			const payload = {
+				id: user.id,
+				email: user.email,
+			};
+			return {
+				username: user.username,
+				user: user.email,
+				access_token: await this.jwtService.signAsync(payload),
+			};
+		} else {
+			throw new UnauthorizedException('Usuario Incorrecto o contraseña ');
+		}
+	}
+	//regitro
+	async registro(body: createUserDTO) {
+		const user = await this.userService.find(body.email);
+		if (user) {
+			throw new BadRequestException('usuario existente');
+		}
+		const newPassword = await bcrypt.hash(body.password, 10);
+		const newUser = { ...body, password: newPassword };
+		const created = await this.userService.create(newUser);
+		return {
+			email: created.email,
+		};
+	}
 }

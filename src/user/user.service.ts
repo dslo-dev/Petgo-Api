@@ -1,26 +1,76 @@
-import { Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { RegisterDTO } from 'src/auth/dto/RegisterDTO';
+import { User } from './entities/user.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { In, Repository } from 'typeorm';
+import { updateUserDTO } from './dto/updateUserDTO';
+import { Role } from './entities/role.entity';
 
 @Injectable()
 export class UserService {
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
-  }
+	constructor(
+		@InjectRepository(User)
+		private readonly userRepository: Repository<User>,
 
-  findAll() {
-    return `This action returns all user`;
-  }
+		@InjectRepository(Role)
+		private readonly roleRepository: Repository<Role>,
+	) {}
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
-  }
+	async create(body: RegisterDTO) {
+		try {
+			const roles = await this.roleRepository.findBy({
+				id: In(body.profile.roleIds),
+			});
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
-  }
+			if (roles.length !== body.profile.roleIds.length) {
+				throw new BadRequestException('Uno o más roles no existen');
+			}
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
-  }
+			const userNew = this.userRepository.create({
+				username: body.username,
+				email: body.email,
+				password: body.password,
+				profile: {
+					avatar: body.profile.avatar,
+					name: body.profile.name,
+					lastname: body.profile.lastname,
+					roles,
+				},
+			});
+
+			return await this.userRepository.save(userNew);
+		} catch (error) {
+			console.error(error);
+			throw new BadRequestException('Error al crear usuario');
+		}
+	}
+
+	async find(email: string) {
+		return await this.userRepository.findOneBy({ email });
+	}
+
+	async findOne(id: number) {
+		return await this.userRepository.findOne({
+			where: { id },
+			relations: {
+				profile: {
+					roles: true,
+				},
+			},
+		});
+	}
+
+	async update(body: updateUserDTO, id: number) {
+		const existente = await this.userRepository.findOneBy({ id });
+
+		if (!existente) {
+			throw new BadRequestException('Usuario no existente');
+		}
+
+		return existente;
+	}
+
+	remove(id: number) {
+		return id;
+	}
 }
