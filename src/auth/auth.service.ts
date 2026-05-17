@@ -43,7 +43,6 @@ export class AuthService {
 		const newUser = { ...body, password: newPassword };
 		const created = await this.userService.create(newUser);
 		return {
-			id: created.id,
 			email: created.email,
 		};
 	}

@@ -1,5 +1,6 @@
-import { IsBoolean, IsNotEmpty, IsOptional, IsString, MaxLength, IsNumber, IsUrl } from 'class-validator';
-
+import { IsNotEmpty, IsOptional, IsString, MaxLength, IsUrl, ValidateNested, IsObject } from 'class-validator';
+import { Role } from 'src/user/entities/role.entity';
+import { Type } from 'class-transformer';
 export class CreateProfileDto {
 	@IsOptional()
 	@IsUrl()
@@ -15,10 +16,8 @@ export class CreateProfileDto {
 	@MaxLength(100)
 	lastname!: string;
 
-	@IsOptional()
-	@IsBoolean()
-	isActive?: boolean;
-
-	@IsNumber()
-	roleId!: number;
+	@ValidateNested()
+	@Type(() => Role)
+	@IsObject()
+	role!: Role;
 }

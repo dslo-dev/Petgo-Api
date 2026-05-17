@@ -1,5 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, DeleteDateColumn, OneToOne } from 'typeorm';
-import { Role } from './Role.entity';
+import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, DeleteDateColumn, ManyToMany } from 'typeorm';
+import { JoinColumn } from 'typeorm';
+import { Role } from './role.entity';
 
 @Entity()
 export class Profile {
@@ -24,6 +25,7 @@ export class Profile {
 	@Column({ name: 'active', default: true })
 	isActive!: boolean;
 
-	@OneToOne(() => Role, { cascade: true })
+	@ManyToMany(() => Role, { nullable: false })
+	@JoinColumn()
 	role!: Role;
 }

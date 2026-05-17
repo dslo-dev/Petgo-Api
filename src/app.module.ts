@@ -12,7 +12,6 @@ import { AuthModule } from './auth/auth.module';
 		ConfigModule.forRoot({
 			isGlobal: true,
 		}),
-
 		TypeOrmModule.forRootAsync({
 			inject: [ConfigService],
 			useFactory: (config: ConfigService) => ({
