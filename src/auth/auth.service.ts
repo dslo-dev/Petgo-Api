@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { LoginDTO } from './dto/LoginDTO';
 import { UserService } from 'src/user/user.service';
-import { createUserDTO } from 'src/user/dto/createUserDTO';
+import { createUserDTO } from 'src/user/dto/usuario/createUserDTO';
 import { JwtService } from '@nestjs/jwt';
 import bcrypt from 'node_modules/bcryptjs';
 import { UnauthorizedException } from '@nestjs/common';

@@ -9,8 +9,8 @@ services:
       POSTGRES_PASSWORD: password
     ports:
       - '5488:5432'
-    volumes:
-      - petgo_postgres_data:/var/lib/postgresql/data
+    # volumes:
+    #   - petgo_postgres_data:/var/lib/postgresql/data
 
   adminer:
     image: adminer:latest
@@ -21,5 +21,5 @@ services:
     depends_on:
       - postgres
 
-volumes:
-  petgo_postgres_data:
+# volumes:
+#   petgo_postgres_data:
