@@ -1,40 +1,47 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { RegisterDTO } from 'src/auth/dto/RegisterDTO';
-import { User } from './entities/usuario.entity';
+import { Usuario } from './entities/usuario.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 import { updateUserDTO } from './dto/usuario/updateUserDTO';
-import { Role } from './entities/rol.entity';
+import { Rol } from './entities/rol.entity';
 
 @Injectable()
 export class UserService {
 	constructor(
-		@InjectRepository(User)
-		private readonly userRepository: Repository<User>,
+		@InjectRepository(Usuario)
+		private readonly userRepository: Repository<Usuario>,
 
-		@InjectRepository(Role)
-		private readonly roleRepository: Repository<Role>,
+		@InjectRepository(Rol)
+		private readonly roleRepository: Repository<Rol>,
 	) {}
 
 	async create(body: RegisterDTO) {
 		try {
 			const roles = await this.roleRepository.findBy({
-				id: In(body.roleIds),
+				id: In(body.roles),
 			});
 
-			if (roles.length !== body.roleIds.length) {
+			if (roles.length !== body.roles.length) {
 				throw new BadRequestException('Uno o más roles no existen');
 			}
 
 			const userNew = this.userRepository.create({
-				username: body.username,
+				nombreUsuario: body.nombreUsuario,
 				email: body.email,
-				password: body.password,
+				contraseña: body.contraseña,
 				roles,
-				profile: {
-					avatar: body.profile.avatar,
-					name: body.profile.name,
-					lastname: body.profile.lastname,
+				perfil: {
+					avatar: body.perfil.avatar,
+					nombre: body.perfil.nombre,
+					appat: body.perfil.appat,
+					apmat: body.perfil.apmat,
+					nacimiento: body.perfil.nacimiento,
+					contacto: {
+						telefonoPrincipal: body.perfil.contacto.telefonoPrincipal,
+						telefonoSegundario: body.perfil.contacto.telefonoSegundario,
+						email: body.perfil.contacto.email,
+					},
 				},
 			});
 

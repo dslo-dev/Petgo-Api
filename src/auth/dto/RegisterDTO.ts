@@ -15,7 +15,7 @@ import { CreateProfileDto } from 'src/user/dto/profile/createProfileDTO';
 export class RegisterDTO {
 	@IsString()
 	@IsNotEmpty()
-	username!: string;
+	nombreUsuario!: string;
 
 	@IsNotEmpty()
 	@IsEmail()
@@ -24,7 +24,7 @@ export class RegisterDTO {
 	@IsNotEmpty()
 	@IsString()
 	@MinLength(8)
-	password!: string;
+	contraseña!: string;
 
 	@IsArray()
 	@ArrayNotEmpty()

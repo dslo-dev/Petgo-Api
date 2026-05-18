@@ -18,15 +18,15 @@ export class AuthService {
 		if (!user) {
 			throw new UnauthorizedException('Usuario Incorrecto o contraseña ');
 		}
-		const isValidPass = await bcrypt.compare(body.password, user.password);
+		const isValidPass = await bcrypt.compare(body.password, user.contraseña);
 		if (isValidPass) {
 			const payload = {
 				id: user.id,
 				email: user.email,
 			};
 			return {
-				username: user.username,
-				user: user.email,
+				nombreUsuario: user.nombreUsuario,
+				email: user.email,
 				access_token: await this.jwtService.signAsync(payload),
 			};
 		} else {
@@ -35,12 +35,15 @@ export class AuthService {
 	}
 	//regitro
 	async registro(body: createUserDTO) {
+		//validacion
 		const user = await this.userService.find(body.email);
 		if (user) {
 			throw new BadRequestException('usuario existente');
 		}
-		const newPassword = await bcrypt.hash(body.password, 10);
-		const newUser = { ...body, password: newPassword };
+		//hash contraseña
+		const newPassword = await bcrypt.hash(body.contraseña, 10);
+		const newUser = { ...body, contraseña: newPassword };
+		//creacion
 		const created = await this.userService.create(newUser);
 		return {
 			email: created.email,

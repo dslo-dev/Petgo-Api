@@ -1,5 +1,7 @@
-import { Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToOne,JoinColumn, PrimaryGeneratedColumn } from 'typeorm';
+import { Direccion } from './direccion.entity';
 
+@Entity()
 export class Detalle {
 	@PrimaryGeneratedColumn()
 	id!: number;
@@ -12,4 +14,8 @@ export class Detalle {
 
 	@Column({ name: 'torre', type: 'varchar', length: 2, nullable: true })
 	torre!: string;
+
+	@OneToOne(() => Direccion)
+	@JoinColumn({ name: 'fk_direccion' })
+	direccion!: Direccion;
 }

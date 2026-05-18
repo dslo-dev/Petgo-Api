@@ -1,5 +1,6 @@
 import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Contacto } from './contacto.entity';
+import { Direccion } from 'src/localizacion/entities/direccion.entity';
 
 @Entity()
 export class Perfil {
@@ -21,7 +22,11 @@ export class Perfil {
 	@Column({ name: 'nacimiento_perfil', type: 'date' })
 	nacimiento!: Date;
 
+	//Relaciones
 	@OneToOne(() => Contacto, { cascade: true })
-	@JoinColumn()
+	@JoinColumn({ name: 'fk_contacto' })
 	contacto!: Contacto;
+
+	@OneToOne(() => Direccion, (direccion) => direccion.perfil)
+	direccion?: Direccion;
 }

@@ -24,20 +24,20 @@ export class Usuario {
 	email!: string;
 
 	@Column({ name: 'constraseña_usuario', type: 'varchar', length: '80', nullable: false })
-	password!: string;
+	contraseña!: string;
 
 	@CreateDateColumn({ name: 'creacion_usuario', default: () => 'CURRENT_TIMESTAMP' })
-	createdAt!: Date;
+	creacion!: Date;
 
 	@DeleteDateColumn({ name: 'eliminacion_usuario', nullable: true })
-	deletedAt!: Date;
+	eliminacion!: Date;
 
 	@Column({ name: 'activo', default: true })
 	isActive!: boolean;
 
 	// Relaciones
 	@OneToOne(() => Perfil, { cascade: true })
-	@JoinColumn()
+	@JoinColumn({ name: 'fk_perfil' })
 	perfil!: Perfil;
 
 	@ManyToMany(() => Rol, (role) => role.usuarios, { cascade: false })
