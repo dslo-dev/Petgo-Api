@@ -31,18 +31,4 @@ export class Profile {
 
 	@Column({ name: 'active', default: true })
 	isActive!: boolean;
-
-	@ManyToMany(() => Role, (role) => role.profiles, { cascade: false })
-	@JoinTable({
-		name: 'profile_roles',
-		joinColumn: {
-			name: 'profile_id',
-			referencedColumnName: 'id',
-		},
-		inverseJoinColumn: {
-			name: 'role_id',
-			referencedColumnName: 'id',
-		},
-	})
-	roles!: Role[];
 }

@@ -1,5 +1,5 @@
 import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { Profile } from './profile.entity';
+import { User } from './user.entity';
 
 @Entity()
 export class Role {
@@ -9,6 +9,6 @@ export class Role {
 	@Column({ name: 'role_name', type: 'varchar', length: 50, nullable: false })
 	roleName!: string;
 
-	@ManyToMany(() => Profile, (profile) => profile.roles)
-	profiles!: Profile;
+	@ManyToMany(() => User, (user) => user.roles)
+	users!: User;
 }
