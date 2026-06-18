@@ -8,7 +8,7 @@ services:
       POSTGRES_USER: apipetgouser
       POSTGRES_PASSWORD: password
     ports:
-      - '5488:5432'
+			5488:5432
     # volumes:
     #   - petgo_postgres_data:/var/lib/postgresql/data
 

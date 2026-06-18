@@ -13,6 +13,11 @@ async function bootstrap() {
 			transform: true,
 		}),
 	);
+	//Habilitar el CORS
+	app.enableCors({
+		origin: 'http://localhost:3001',
+		credentials: true,
+	});
 	//configuracion del puerto
 	await app.listen(process.env.PORT ?? 3000);
 }
