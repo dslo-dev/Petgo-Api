@@ -1,4 +1,15 @@
-import { IsNotEmpty, IsOptional, IsString, MaxLength, IsUrl, IsArray, IsInt, ArrayNotEmpty } from 'class-validator';
+import {
+	IsNotEmpty,
+	IsOptional,
+	IsString,
+	MaxLength,
+	IsUrl,
+	IsDateString,
+	ValidateNested,
+	IsObject,
+} from 'class-validator';
+import { Type } from 'class-transformer';
+import { CreateContactoDto } from '../contacto/createContactoDTO';
 
 export class CreateProfileDto {
 	@IsOptional()
@@ -8,15 +19,25 @@ export class CreateProfileDto {
 	@IsString()
 	@IsNotEmpty()
 	@MaxLength(100)
-	name!: string;
+	nombre!: string;
 
 	@IsString()
 	@IsNotEmpty()
-	@MaxLength(100)
-	lastname!: string;
+	@MaxLength(70)
+	appat!: string;
 
-	@IsArray()
-	@ArrayNotEmpty()
-	@IsInt({ each: true })
-	roleIds!: number[];
+	@IsString()
+	@IsNotEmpty()
+	@MaxLength(70)
+	apmat!: string;
+
+	@IsDateString()
+	@IsNotEmpty()
+	nacimiento!: string;
+
+	@ValidateNested()
+	@Type(() => CreateContactoDto)
+	@IsNotEmpty()
+	@IsObject()
+	contacto!: CreateContactoDto;
 }

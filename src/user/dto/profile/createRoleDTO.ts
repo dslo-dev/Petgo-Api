@@ -7,5 +7,5 @@ export class CreateRoleDto {
 
 	@IsOptional()
 	@IsString()
-	name!: string;
+	nombre!: string;
 }

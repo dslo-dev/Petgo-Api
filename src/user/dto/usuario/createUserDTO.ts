@@ -1,18 +1,18 @@
 import {
+	ArrayNotEmpty,
+	IsArray,
 	IsEmail,
+	IsInt,
 	IsNotEmpty,
 	IsObject,
 	IsString,
 	MinLength,
 	ValidateNested,
-	IsArray,
-	IsInt,
-	ArrayNotEmpty,
 } from 'class-validator';
 import { Type } from 'class-transformer';
-import { CreateProfileDto } from 'src/user/dto/profile/createProfileDTO';
+import { CreateProfileDto } from '../profile/createProfileDTO';
 
-export class RegisterDTO {
+export class createUserDTO {
 	@IsString()
 	@IsNotEmpty()
 	nombreUsuario!: string;
