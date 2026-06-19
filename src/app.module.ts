@@ -7,6 +7,8 @@ import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { LocalizacionModule } from './localizacion/localizacion.module';
+import { GrupoFamiliarModule } from './grupo-familiar/grupo-familiar.module';
+import { MascotasModule } from './mascotas/mascotas.module';
 
 @Module({
 	imports: [
@@ -29,6 +31,8 @@ import { LocalizacionModule } from './localizacion/localizacion.module';
 		UserModule,
 		AuthModule,
 		LocalizacionModule,
+		GrupoFamiliarModule,
+		MascotasModule,
 	],
 	controllers: [AppController],
 	providers: [AppService],

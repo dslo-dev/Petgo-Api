@@ -1,4 +1,4 @@
-import { Column, Entity, OneToOne,JoinColumn, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToOne, JoinColumn, PrimaryGeneratedColumn } from 'typeorm';
 import { Direccion } from './direccion.entity';
 
 @Entity()
