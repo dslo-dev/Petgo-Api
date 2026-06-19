@@ -8,6 +8,7 @@ import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { LocalizacionModule } from './localizacion/localizacion.module';
 import { GrupoFamiliarModule } from './grupo-familiar/grupo-familiar.module';
+import { MascotasModule } from './mascotas/mascotas.module';
 
 @Module({
 	imports: [
@@ -31,6 +32,7 @@ import { GrupoFamiliarModule } from './grupo-familiar/grupo-familiar.module';
 		AuthModule,
 		LocalizacionModule,
 		GrupoFamiliarModule,
+		MascotasModule,
 	],
 	controllers: [AppController],
 	providers: [AppService],
