@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+
 import { CreateMascotaDto } from './dto/mascota/create-mascota.dto';
 import { UpdateMascotaDto } from './dto/mascota/update-mascota.dto';
 import { Mascota } from './entities/mascota.entity';
-import { Repository } from 'typeorm';
-import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class MascotasService {
@@ -12,13 +13,15 @@ export class MascotasService {
 		private mascotaRepo: Repository<Mascota>,
 	) {}
 
-	create(dto: CreateMascotaDto) {
-		const mascota = this.mascotaRepo.create(dto);
+	create(dto: CreateMascotaDto, usuarioId: string) {
+		const mascota = this.mascotaRepo.create({ ...dto, creadoPor: usuarioId });
 		return this.mascotaRepo.save(mascota);
 	}
 
-	findAll() {
+	findAll(usuarioId?: string) {
+		const where = usuarioId ? { creadoPor: usuarioId } : {};
 		return this.mascotaRepo.find({
+			where,
 			relations: ['especie', 'raza', 'microchip'],
 		});
 	}
@@ -30,12 +33,22 @@ export class MascotasService {
 		});
 	}
 
-	async update(id: string, dto: UpdateMascotaDto) {
+	async update(id: string, dto: UpdateMascotaDto, usuarioId: string) {
+		const mascota = await this.findOne(id);
+		if (!mascota) throw new NotFoundException('Mascota no encontrada');
+		if (mascota.creadoPor !== usuarioId) {
+			throw new BadRequestException('Solo el creador puede modificar esta mascota');
+		}
 		await this.mascotaRepo.update(id, dto);
 		return this.findOne(id);
 	}
 
-	remove(id: string) {
+	async remove(id: string, usuarioId: string) {
+		const mascota = await this.findOne(id);
+		if (!mascota) throw new NotFoundException('Mascota no encontrada');
+		if (mascota.creadoPor !== usuarioId) {
+			throw new BadRequestException('Solo el creador puede eliminar esta mascota');
+		}
 		return this.mascotaRepo.delete(id);
 	}
 }

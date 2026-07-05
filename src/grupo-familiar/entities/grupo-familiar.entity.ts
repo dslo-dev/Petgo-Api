@@ -2,6 +2,7 @@ import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, Up
 
 import { MiembroGrupo } from './miembro-grupo.entity';
 import { Invitacion } from './invitacion.entity';
+import { GrupoMascota } from './grupo-mascota.entity';
 import { Estado } from '../../common/Enums';
 
 @Entity('grupos_familiares')
@@ -18,15 +19,10 @@ export class GrupoFamiliar {
 	@Column('uuid')
 	creadoPor!: string;
 
-	@Column({
-		type: 'text',
-		nullable: true,
-	})
+	@Column({ type: 'text', nullable: true })
 	descripcion?: string;
 
-	@Column({
-		nullable: true,
-	})
+	@Column({ nullable: true })
 	urlImagen?: string;
 
 	@CreateDateColumn()
@@ -46,4 +42,7 @@ export class GrupoFamiliar {
 
 	@OneToMany(() => Invitacion, (invitacion) => invitacion.grupo)
 	invitaciones!: Invitacion[];
+
+	@OneToMany(() => GrupoMascota, (gm) => gm.grupo)
+	mascotas!: GrupoMascota[];
 }

@@ -1,15 +1,9 @@
-import { IsOptional, IsString, IsUUID, MaxLength } from 'class-validator';
+import { IsOptional, IsString, MaxLength } from 'class-validator';
 
 export class CreateGrupoFamiliarDto {
 	@IsString()
 	@MaxLength(150)
 	nombre!: string;
-
-	@IsUUID()
-	propietarioId!: string;
-
-	@IsUUID()
-	creadoPor!: string;
 
 	@IsOptional()
 	@IsString()

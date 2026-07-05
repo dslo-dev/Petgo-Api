@@ -23,7 +23,8 @@ export class Mascota {
 	@Column({ nullable: true })
 	descripcionFisica!: string;
 
-	// RELACIONES
+	@Column('uuid')
+	creadoPor!: string;
 
 	@ManyToOne(() => Especie, (especie) => especie.mascotas)
 	especie!: Especie;

@@ -21,6 +21,7 @@ export class AuthService {
 		const isValidPass = await bcrypt.compare(body.password, user.contraseña);
 		if (isValidPass) {
 			const payload = {
+				sub: user.id,
 				id: user.id,
 				email: user.email,
 			};

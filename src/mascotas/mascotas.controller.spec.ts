@@ -38,10 +38,10 @@ describe('MascotasController', () => {
 
     mockMascotasService.create.mockResolvedValue(resultMock);
 
-    const result = await controller.create(dto as any);
+    const result = await controller.create(dto as any, 'user-1');
 
     expect(result).toEqual(resultMock);
-    expect(mockMascotasService.create).toHaveBeenCalledWith(dto);
+    expect(mockMascotasService.create).toHaveBeenCalledWith(dto, 'user-1');
   });
 
   // FIND ALL
@@ -53,7 +53,18 @@ describe('MascotasController', () => {
     const result = await controller.findAll();
 
     expect(result).toEqual(data);
-    expect(mockMascotasService.findAll).toHaveBeenCalled();
+    expect(mockMascotasService.findAll).toHaveBeenCalledWith(undefined);
+  });
+
+  it('should filter mascotas by usuarioId', async () => {
+    const data = [{ id: '1', creadoPor: 'u-1' }];
+
+    mockMascotasService.findAll.mockResolvedValue(data);
+
+    const result = await controller.findAll('u-1');
+
+    expect(result).toEqual(data);
+    expect(mockMascotasService.findAll).toHaveBeenCalledWith('u-1');
   });
 
   // FIND ONE
@@ -75,19 +86,19 @@ describe('MascotasController', () => {
 
     mockMascotasService.update.mockResolvedValue(updated);
 
-    const result = await controller.update('1', dto as any);
+    const result = await controller.update('1', dto as any, 'user-1');
 
     expect(result).toEqual(updated);
-    expect(mockMascotasService.update).toHaveBeenCalledWith('1', dto);
+    expect(mockMascotasService.update).toHaveBeenCalledWith('1', dto, 'user-1');
   });
 
   // DELETE
   it('should remove a mascota', async () => {
     mockMascotasService.remove.mockResolvedValue({ deleted: true });
 
-    const result = await controller.remove('1');
+    const result = await controller.remove('1', 'user-1');
 
     expect(result).toEqual({ deleted: true });
-    expect(mockMascotasService.remove).toHaveBeenCalledWith('1');
+    expect(mockMascotasService.remove).toHaveBeenCalledWith('1', 'user-1');
   });
 });
