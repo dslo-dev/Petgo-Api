@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { APP_GUARD } from '@nestjs/core';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -9,6 +10,7 @@ import { AuthModule } from './auth/auth.module';
 import { LocalizacionModule } from './localizacion/localizacion.module';
 import { GrupoFamiliarModule } from './grupo-familiar/grupo-familiar.module';
 import { MascotasModule } from './mascotas/mascotas.module';
+import { JwtAuthGuard } from './common/auth/jwt-auth.guard';
 
 @Module({
 	imports: [
@@ -35,6 +37,9 @@ import { MascotasModule } from './mascotas/mascotas.module';
 		MascotasModule,
 	],
 	controllers: [AppController],
-	providers: [AppService],
+	providers: [
+		AppService,
+		{ provide: APP_GUARD, useClass: JwtAuthGuard },
+	],
 })
 export class AppModule {}

@@ -1,10 +1,10 @@
-import { Body, Controller, Delete, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 
 import { MiembroService } from '../services/miembro.service';
 import { CreateMiembroDto } from '../dto/miembro/create-miembro.dto';
 import { CambiarRolDto } from '../dto/miembro/cambiar-rol.dto';
-
-import { ApiTags, ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
+import { CurrentUser } from '../../common/auth/current-user.decorator';
 
 @ApiTags('Miembros')
 @Controller('miembros')
@@ -12,24 +12,30 @@ export class MiembroController {
 	constructor(private readonly miembroService: MiembroService) {}
 
 	@Post()
-	@ApiOperation({ summary: 'Agregar un miembro a un grupo' })
-	@ApiResponse({ status: 201, description: 'Miembro agregado correctamente' })
-	agregarMiembro(@Body() dto: CreateMiembroDto) {
-		return this.miembroService.agregarMiembro(dto);
+	@ApiOperation({ summary: 'Agregar un miembro a un grupo (solo dueño, no puede ser DUENO)' })
+	@ApiResponse({ status: 201, description: 'Miembro agregado' })
+	agregarMiembro(@Body() dto: CreateMiembroDto, @CurrentUser('sub') usuarioId: string) {
+		return this.miembroService.agregarMiembro(dto, usuarioId);
+	}
+
+	@Get('grupo/:grupoId')
+	@ApiOperation({ summary: 'Obtener miembros activos de un grupo' })
+	@ApiResponse({ status: 200, description: 'Lista de miembros' })
+	obtenerMiembros(@Param('grupoId') grupoId: string) {
+		return this.miembroService.obtenerMiembrosPorGrupo(grupoId);
 	}
 
 	@Patch('rol')
-	@ApiOperation({ summary: 'Cambiar rol de un miembro' })
-	@ApiResponse({ status: 200, description: 'Rol actualizado correctamente' })
-	cambiarRol(@Body() dto: CambiarRolDto) {
-		return this.miembroService.cambiarRol(dto);
+	@ApiOperation({ summary: 'Cambiar rol de un miembro (solo dueño)' })
+	@ApiResponse({ status: 200, description: 'Rol actualizado' })
+	cambiarRol(@Body() dto: CambiarRolDto, @CurrentUser('sub') usuarioId: string) {
+		return this.miembroService.cambiarRol(dto, usuarioId);
 	}
 
 	@Delete(':id')
-	@ApiOperation({ summary: 'Expulsar un miembro del grupo' })
-	@ApiParam({ name: 'id', description: 'ID del miembro' })
-	@ApiResponse({ status: 200, description: 'Miembro eliminado del grupo' })
-	expulsar(@Param('id') id: string) {
-		return this.miembroService.expulsar(id);
+	@ApiOperation({ summary: 'Expulsar un miembro del grupo (solo dueño, soft delete)' })
+	@ApiResponse({ status: 200, description: 'Miembro expulsado' })
+	expulsar(@Param('id') id: string, @CurrentUser('sub') usuarioId: string) {
+		return this.miembroService.expulsar(id, usuarioId);
 	}
 }
