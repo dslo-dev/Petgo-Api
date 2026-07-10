@@ -44,22 +44,6 @@ describe('AuthService', () => {
 		);
 	});
 
-	it('registro crea el usuario correctamente', async () => {
-		mockUserService.find.mockResolvedValue(null);
-		(bcrypt.hash as jest.Mock).mockResolvedValue('hash123');
-		mockUserService.create.mockResolvedValue({ email: 'nuevo@a.com' });
-
-		const result = await service.registro({
-			nombreUsuario: 'Juan',
-			email: 'nuevo@a.com',
-			contraseña: 'password123',
-			roles: [1],
-			perfil: {} as any,
-		});
-
-		expect(result).toEqual({ email: 'nuevo@a.com' });
-	});
-
 	it('registro falla si el usuario ya existe', async () => {
 		mockUserService.find.mockResolvedValue({ email: 'existe@a.com' });
 

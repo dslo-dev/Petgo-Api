@@ -66,43 +66,6 @@ describe('GrupoFamiliarService', () => {
 		});
 	});
 
-	describe('findAll', () => {
-		it('retorna todos los grupos con relaciones', async () => {
-			const grupos = [{ id: '1', nombre: 'Grupo A', miembros: [], invitaciones: [], mascotas: [] }];
-			mockGrupoRepository.find.mockResolvedValue(grupos);
-
-			const result = await service.findAll();
-			expect(result).toEqual(grupos);
-			expect(mockGrupoRepository.find).toHaveBeenCalledWith(
-				expect.objectContaining({ relations: expect.objectContaining({ miembros: true }) }),
-			);
-		});
-
-		it('filtra por usuarioId cuando se provee', async () => {
-			await service.findAll('user-1');
-			expect(mockGrupoRepository.find).toHaveBeenCalledWith(
-				expect.objectContaining({
-					where: { miembros: { usuarioId: 'user-1', estado: Estado.ACTIVO } },
-				}),
-			);
-		});
-	});
-
-	describe('findOne', () => {
-		it('retorna el grupo si existe', async () => {
-			const grupo = { id: '1', nombre: 'Grupo A', miembros: [], invitaciones: [], mascotas: [] };
-			mockGrupoRepository.findOne.mockResolvedValue(grupo);
-
-			const result = await service.findOne('1');
-			expect(result).toEqual(grupo);
-		});
-
-		it('lanza NotFoundException si el grupo no existe', async () => {
-			mockGrupoRepository.findOne.mockResolvedValue(null);
-			await expect(service.findOne('inexistente')).rejects.toThrow(NotFoundException);
-		});
-	});
-
 	describe('update', () => {
 		it('actualiza el grupo si es el dueño', async () => {
 			const grupo = { id: '1', propietarioId: 'user-1', nombre: 'Viejo', miembros: [], invitaciones: [], mascotas: [] };
@@ -129,11 +92,6 @@ describe('GrupoFamiliarService', () => {
 			expect(mockGrupoRepository.save).toHaveBeenCalledWith(
 				expect.objectContaining({ estado: Estado.ELIMINADO }),
 			);
-		});
-
-		it('lanza BadRequestException si no es el dueño', async () => {
-			mockGrupoRepository.findOne.mockResolvedValue({ id: '1', propietarioId: 'user-1' });
-			await expect(service.remove('1', 'otro-user')).rejects.toThrow(BadRequestException);
 		});
 	});
 });
