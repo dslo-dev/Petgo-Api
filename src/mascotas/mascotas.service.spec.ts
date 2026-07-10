@@ -35,7 +35,7 @@ describe('MascotasService', () => {
 		jest.clearAllMocks();
 	});
 
-	it('should create a mascota', async () => {
+	it('crea una mascota correctamente', async () => {
 		const dto = {
 			nombre: 'Firulais',
 			peso: 10,
@@ -58,7 +58,7 @@ describe('MascotasService', () => {
 		expect(mockMascotaRepository.save).toHaveBeenCalled();
 	});
 
-	it('should update a mascota if owner', async () => {
+	it('actualiza la mascota si es el propietario', async () => {
 		const updateDto = { nombre: 'Nuevo nombre' };
 
 		const existingMascota = {
@@ -83,7 +83,7 @@ describe('MascotasService', () => {
 		expect(mockMascotaRepository.update).toHaveBeenCalledWith('1', updateDto);
 	});
 
-	it('should throw if not owner on update', async () => {
+	it('lanza error si no es el propietario al actualizar', async () => {
 		const mascota = { id: '1', creadoPor: 'user-1' };
 		mockMascotaRepository.findOne.mockResolvedValue(mascota);
 
@@ -91,7 +91,7 @@ describe('MascotasService', () => {
 		expect(mockMascotaRepository.update).not.toHaveBeenCalled();
 	});
 
-	it('should throw if mascota not found on delete', async () => {
+	it('lanza NotFoundException si la mascota no existe al eliminar', async () => {
 		mockMascotaRepository.findOne.mockResolvedValue(null);
 
 		await expect(service.remove('1', 'user-1')).rejects.toThrow(NotFoundException);
